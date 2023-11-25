@@ -462,7 +462,7 @@ fn main() -> Result<()> {
                 .direction(Direction::Horizontal)
                 .constraints(vec![
                     Constraint::Max(area.height * 2 + 6),
-                    Constraint::Max(area.height),
+                    Constraint::Max((area.height/2 )+ 5),
                     Constraint::Min(0),
                 ])
                 .split(area);
@@ -558,13 +558,17 @@ fn main() -> Result<()> {
             }
 
             let stats_detail =
-                Paragraph::new(format!("Score: {}\nBest: {:?}", max_value, best_value))
+                Paragraph::new(format!(
+                                "Score: {}\nBest: {:?}\n\n\n\n\n\nControls:\n← ↑ ↓ →\n\n\n'q' to quit",
+                                max_value,
+                                best_value
+                                ))
                     .style(Style::default().fg(Color::LightBlue))
                     .block(
                         Block::default()
                             .title("Stats")
                             //center the title
-                            .title_alignment(Alignment::Center)
+                            .title_alignment(Alignment::Left)
                             .borders(Borders::ALL)
                             .border_type(BorderType::Double)
                             .padding(Padding::new(1, 1, outer[1].height / 3, 1)),
