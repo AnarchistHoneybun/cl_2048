@@ -563,7 +563,7 @@ fn main() -> Result<()> {
                                 max_value,
                                 best_value
                                 ))
-                    .style(Style::default().fg(Color::LightBlue))
+                    .style(Style::default().fg(Color::Cyan))
                     .block(
                         Block::default()
                             .title("Stats")
