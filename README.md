@@ -6,7 +6,7 @@ The amazing game 2048, written in rust, using ratatui for the interface.
 2. Move to the cloned directory `cd game-2048-tui`
 3. Run the game `cargo run` !
 
-![Screenshot](Attachments/game_reference.png)
+![Screenshot](Attachments/game_reference.png){width=518 height=385}
 
 ## Controls
  - Use the arrow keys (← ↑ ↓ →) to move the blocks around,
