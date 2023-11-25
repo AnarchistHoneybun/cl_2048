@@ -3,7 +3,7 @@
 #![allow(unused_assignments)]
 
 use std::fs::File;
-use std::{io, fs};
+use std::{fs, io};
 
 // ANCHOR: imports
 use crossterm::{
@@ -18,7 +18,6 @@ use std::num::ParseIntError;
 use std::rc::Rc;
 use std::u16::MAX;
 // ANCHOR_END: imports
-
 
 fn startup(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
     //make a copy of the nodes vector
@@ -141,8 +140,6 @@ fn game_prog(nodes: Vec<Vec<Node>>, state_changed: bool) -> Vec<Vec<Node>> {
         }
     }
 
-
-
     //check if the state has changed
     //dbg!(state_changed);
 
@@ -202,7 +199,6 @@ fn is_power_of_two(value: u16) -> bool {
     }
     return value & (value - 1) == 0;
 }
-
 
 fn merge_up(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
     // iterate across the columns in the nodes vector
@@ -405,7 +401,6 @@ fn merge_right(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
     return new_nodes;
 }
 
-
 //ANCHOR: structs
 struct App {
     nodes: Vec<Vec<Node>>,
@@ -416,7 +411,6 @@ struct Node {
     empty: bool,
 }
 //ANCHOR_END: structs
-
 
 //ANCHOR: setup
 
@@ -450,7 +444,6 @@ fn main() -> Result<()> {
 
     let mut best_value = contents.parse::<u16>().unwrap();
 
-
     // ANCHOR_END: setup
 
     //ANCHOR: draw
@@ -462,7 +455,7 @@ fn main() -> Result<()> {
                 .direction(Direction::Horizontal)
                 .constraints(vec![
                     Constraint::Max(area.height * 2 + 6),
-                    Constraint::Max((area.height/2 )+ 5),
+                    Constraint::Max((area.height / 2) + 5),
                     Constraint::Min(0),
                 ])
                 .split(area);
@@ -482,11 +475,7 @@ fn main() -> Result<()> {
                 ])
                 .split(outer_subdiv[1]);
 
-            let mut cols: [Rc<[Rect]>; 4] = [
-                Rc::new([]),
-                Rc::new([]),
-                Rc::new([]),
-                Rc::new([])];
+            let mut cols: [Rc<[Rect]>; 4] = [Rc::new([]), Rc::new([]), Rc::new([]), Rc::new([])];
 
             for i in 0..4 {
                 cols[i] = Layout::default()
@@ -551,35 +540,26 @@ fn main() -> Result<()> {
 
             if max_value > best_value {
                 best_value = max_value;
-                fs::write(
-                    file_path,
-                    best_value.to_string()
-                ).expect("Unable to write game data")
+                fs::write(file_path, best_value.to_string()).expect("Unable to write game data")
             }
 
-            let stats_detail =
-                Paragraph::new(format!(
-                                "Score: {}\nBest: {:?}\n\n\n\n\n\nControls:\n← ↑ ↓ →\n\n\n'q' to quit",
-                                max_value,
-                                best_value
-                                ))
-                    .style(Style::default().fg(Color::Cyan))
-                    .block(
-                        Block::default()
-                            .title("Stats")
-                            //center the title
-                            .title_alignment(Alignment::Left)
-                            .borders(Borders::ALL)
-                            .border_type(BorderType::Double)
-                            .padding(Padding::new(1, 1, outer[1].height / 3, 1)),
-                    )
-                    //center the text vertically and horizontally
-                    .alignment(Alignment::Left);
+            let stats_detail = Paragraph::new(format!(
+                "Score: {}\nBest: {:?}\n\n\n\n\n\nControls:\n← ↑ ↓ →\n\n\n'q' to quit",
+                max_value, best_value
+            ))
+            .style(Style::default().fg(Color::Cyan))
+            .block(
+                Block::default()
+                    .title("Stats")
+                    //center the title
+                    .title_alignment(Alignment::Left)
+                    .borders(Borders::ALL)
+                    .border_type(BorderType::Double)
+                    .padding(Padding::new(1, 1, outer[1].height / 3, 1)),
+            )
+            //center the text vertically and horizontally
+            .alignment(Alignment::Left);
             frame.render_widget(stats_detail, outer[1]);
-
-
-
-
         })?;
         //ANCHOR_END: draw
 
@@ -606,31 +586,3 @@ fn main() -> Result<()> {
     disable_raw_mode()?;
     Ok(())
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
