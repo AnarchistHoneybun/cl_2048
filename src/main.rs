@@ -17,6 +17,7 @@ use std::io::{stdout, Read, Result};
 use std::num::ParseIntError;
 use std::rc::Rc;
 use std::u16::MAX;
+use enigo::*;
 // ANCHOR_END: imports
 
 fn startup(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
@@ -125,6 +126,9 @@ fn shutdown() -> Result<()> {
 fn game_prog(nodes: Vec<Vec<Node>>, state_changed: bool) -> Vec<Vec<Node>> {
     //make a copy of the nodes vector
     let mut new_nodes = nodes.clone();
+    let mut enigo = Enigo::new();
+
+    
 
     //iterate through the new_nodes vector and check if any of the nodes are empty
     //if a node is empty, store it's coordinates to a 2d vector
@@ -147,11 +151,7 @@ fn game_prog(nodes: Vec<Vec<Node>>, state_changed: bool) -> Vec<Vec<Node>> {
         //if the state has not changed and there are no empty nodes, the game is over
 
         if check_game_over(&new_nodes) {
-            //print game over and exit the program
-            shutdown().expect("TODO: panic message");
-            //end execution
-            println!("Game Over! No moves left");
-            std::process::exit(0);
+            enigo.key_down(Key::Layout('q'));
         } else {
             //if the game is not over, return the nodes vector
             return new_nodes;
@@ -443,6 +443,7 @@ fn main() -> Result<()> {
     contents = fs::read_to_string(file_path).expect("Should have a txt file in source");
 
     let mut best_value = contents.parse::<u16>().unwrap();
+    let mut max_value = 0;
 
     // ANCHOR_END: setup
 
@@ -529,7 +530,7 @@ fn main() -> Result<()> {
                 }
             }
 
-            let mut max_value = 0;
+            
             for i in 0..4 {
                 for j in 0..4 {
                     if app.nodes[i][j].value > max_value {
@@ -584,5 +585,6 @@ fn main() -> Result<()> {
 
     stdout().execute(LeaveAlternateScreen)?;
     disable_raw_mode()?;
+    println!("Game Over! You reached {}.", max_value);
     Ok(())
 }
