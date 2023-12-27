@@ -2,6 +2,9 @@
 #![allow(dead_code)]
 #![allow(unused_assignments)]
 
+mod colors;
+mod movement;
+
 use std::fs::File;
 use std::{fs, io};
 
@@ -17,7 +20,6 @@ use std::io::{stdout, Read, Result};
 use std::num::ParseIntError;
 use std::rc::Rc;
 use std::u16::MAX;
-//use enigo::*;
 // ANCHOR_END: imports
 
 fn startup(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
@@ -46,77 +48,7 @@ fn startup(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
     //return the new_nodes vector
     return new_nodes;
 }
-fn color_setter(value: u16) -> Color {
-    // check value and generate rgb values based on the value
-    if value == 0 {
-        return Color::Black;
-    }
 
-    //write a match statement that returns a Color::red based on the value
-
-    match value {
-        2 => Color::Rgb {
-            0: 238,
-            1: 228,
-            2: 218,
-        },
-        4 => Color::Rgb {
-            0: 237,
-            1: 224,
-            2: 200,
-        },
-        8 => Color::Rgb {
-            0: 242,
-            1: 177,
-            2: 121,
-        },
-        16 => Color::Rgb {
-            0: 245,
-            1: 149,
-            2: 99,
-        },
-        32 => Color::Rgb {
-            0: 246,
-            1: 124,
-            2: 96,
-        },
-        64 => Color::Rgb {
-            0: 246,
-            1: 94,
-            2: 59,
-        },
-        128 => Color::Rgb {
-            0: 237,
-            1: 207,
-            2: 114,
-        },
-        256 => Color::Rgb {
-            0: 237,
-            1: 204,
-            2: 97,
-        },
-        512 => Color::Rgb {
-            0: 237,
-            1: 200,
-            2: 80,
-        },
-        1024 => Color::Rgb {
-            0: 237,
-            1: 197,
-            2: 63,
-        },
-        2048 => Color::Rgb {
-            0: 237,
-            1: 194,
-            2: 46,
-        },
-        _ => Color::Rgb {
-            0: 237,
-            1: 194,
-            2: 46,
-        },
-    }
-}
 fn shutdown() -> Result<()> {
     execute!(std::io::stderr(), LeaveAlternateScreen)?;
     disable_raw_mode()?;
@@ -126,7 +58,6 @@ fn shutdown() -> Result<()> {
 fn game_prog(nodes: Vec<Vec<Node>>, state_changed: bool) -> Vec<Vec<Node>> {
     //make a copy of the nodes vector
     let mut new_nodes = nodes.clone();
-    //let mut enigo = Enigo::new();
 
 
 
@@ -202,213 +133,13 @@ fn is_power_of_two(value: u16) -> bool {
     return value & (value - 1) == 0;
 }
 
-fn merge_up(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
-    // iterate across the columns in the nodes vector
-    // for each column, iterate up the rows
-    //if a node is not empty, check if the node above it is empty
-    //if the node above it is empty, move the node up
-    //if the node above it is not empty, check if the node above it is equal to the node
-    //if the node above it is equal to the node, merge the nodes
-    //if the node above it is not equal to the node, move both the nodes up one row
-
-    let mut state_changed = false;
-
-    //make a copy of the nodes vector
-    let mut new_nodes = nodes.clone();
-
-    //iterate across the columns in the nodes vector
-    for i in 1..4 {
-        for j in 0..4 {
-            if new_nodes[i][j].value == 0 {
-                continue;
-            } else {
-                let mut temp = i - 1;
-                while temp > 0 && new_nodes[temp][j].value == 0 {
-                    temp = temp - 1;
-                }
-                if new_nodes[temp][j].value == new_nodes[i][j].value {
-                    new_nodes[temp][j].value = new_nodes[temp][j].value * 2;
-                    new_nodes[temp][j].empty = false;
-                    state_changed = true;
-                    new_nodes[i][j].value = 0;
-                    new_nodes[i][j].empty = true;
-                } else {
-                    if new_nodes[temp][j].value == 0 {
-                        new_nodes[temp][j].value = new_nodes[i][j].value;
-                        new_nodes[temp][j].empty = false;
-                        state_changed = true;
-                        new_nodes[i][j].value = 0;
-                        new_nodes[i][j].empty = true;
-                    } else {
-                        if temp + 1 != i {
-                            new_nodes[temp + 1][j].value = new_nodes[i][j].value;
-                            new_nodes[temp + 1][j].empty = false;
-                            state_changed = true;
-                            new_nodes[i][j].value = 0;
-                            new_nodes[i][j].empty = true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    new_nodes = game_prog(new_nodes, state_changed);
-
-    //return the new_nodes vector
-    return new_nodes;
-}
-
-fn merge_down(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
-    //make a copy of the nodes vector
-    let mut new_nodes = nodes.clone();
-    let mut state_changed = false;
-
-    //iterate across the columns in the nodes vector
-    for i in (0..3).rev() {
-        for j in 0..4 {
-            if new_nodes[i][j].value == 0 {
-                continue;
-            } else {
-                let mut temp = i + 1;
-                while temp < 3 && new_nodes[temp][j].value == 0 {
-                    temp += 1;
-                }
-                if new_nodes[temp][j].value == new_nodes[i][j].value {
-                    new_nodes[temp][j].value = new_nodes[temp][j].value * 2;
-                    new_nodes[temp][j].empty = false;
-                    state_changed = true;
-                    new_nodes[i][j].value = 0;
-                    new_nodes[i][j].empty = true;
-                } else {
-                    if new_nodes[temp][j].value == 0 {
-                        new_nodes[temp][j].value = new_nodes[i][j].value;
-                        new_nodes[temp][j].empty = false;
-                        state_changed = true;
-                        new_nodes[i][j].value = 0;
-                        new_nodes[i][j].empty = true;
-                    } else {
-                        if temp - 1 != i {
-                            new_nodes[temp - 1][j].value = new_nodes[i][j].value;
-                            new_nodes[temp - 1][j].empty = false;
-                            state_changed = true;
-                            new_nodes[i][j].value = 0;
-                            new_nodes[i][j].empty = true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    new_nodes = game_prog(new_nodes, state_changed);
-
-    //return the new_nodes vector
-    return new_nodes;
-}
-fn merge_left(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
-    let mut state_changed = false;
-
-    //make a copy of the nodes vector
-    let mut new_nodes = nodes.clone();
-
-    //iterate across the columns in the nodes vector
-    for j in 1..4 {
-        for i in 0..4 {
-            if new_nodes[i][j].value == 0 {
-                continue;
-            } else {
-                let mut temp = j - 1;
-                while temp > 0 && new_nodes[i][temp].value == 0 {
-                    temp = temp - 1;
-                }
-                if new_nodes[i][temp].value == new_nodes[i][j].value {
-                    new_nodes[i][temp].value = new_nodes[i][temp].value * 2;
-                    new_nodes[i][temp].empty = false;
-                    state_changed = true;
-                    new_nodes[i][j].value = 0;
-                    new_nodes[i][j].empty = true;
-                } else {
-                    if new_nodes[i][temp].value == 0 {
-                        new_nodes[i][temp].value = new_nodes[i][j].value;
-                        new_nodes[i][temp].empty = false;
-                        state_changed = true;
-                        new_nodes[i][j].value = 0;
-                        new_nodes[i][j].empty = true;
-                    } else {
-                        if temp + 1 != j {
-                            new_nodes[i][temp + 1].value = new_nodes[i][j].value;
-                            new_nodes[i][temp + 1].empty = false;
-                            state_changed = true;
-                            new_nodes[i][j].value = 0;
-                            new_nodes[i][j].empty = true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    new_nodes = game_prog(new_nodes, state_changed);
-
-    //return the new_nodes vector
-    return new_nodes;
-}
-fn merge_right(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
-    let mut state_changed = false;
-
-    //make a copy of the nodes vector
-    let mut new_nodes = nodes.clone();
-
-    //iterate across the columns in the nodes vector
-    for j in (0..3).rev() {
-        for i in 0..4 {
-            if new_nodes[i][j].value == 0 {
-                continue;
-            } else {
-                let mut temp = j + 1;
-                while temp < 3 && new_nodes[i][temp].value == 0 {
-                    temp += 1;
-                }
-                if new_nodes[i][temp].value == new_nodes[i][j].value {
-                    new_nodes[i][temp].value = new_nodes[i][temp].value * 2;
-                    new_nodes[i][temp].empty = false;
-                    state_changed = true;
-                    new_nodes[i][j].value = 0;
-                    new_nodes[i][j].empty = true;
-                } else {
-                    if new_nodes[i][temp].value == 0 {
-                        new_nodes[i][temp].value = new_nodes[i][j].value;
-                        new_nodes[i][temp].empty = false;
-                        state_changed = true;
-                        new_nodes[i][j].value = 0;
-                        new_nodes[i][j].empty = true;
-                    } else {
-                        if temp - 1 != j {
-                            new_nodes[i][temp - 1].value = new_nodes[i][j].value;
-                            new_nodes[i][temp - 1].empty = false;
-                            state_changed = true;
-                            new_nodes[i][j].value = 0;
-                            new_nodes[i][j].empty = true;
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    new_nodes = game_prog(new_nodes, state_changed);
-
-    //return the new_nodes vector
-    return new_nodes;
-}
 
 //ANCHOR: structs
 struct App {
     nodes: Vec<Vec<Node>>,
 }
 #[derive(Clone)]
-struct Node {
+pub struct Node {
     value: u16,
     empty: bool,
 }
@@ -518,7 +249,7 @@ fn main() -> Result<()> {
                     }
 
                     let game_blocks = Paragraph::new(format!("{}", block_text))
-                        .style(Style::default().fg(color_setter(block_value)))
+                        .style(Style::default().fg(colors::color_setter(block_value)))
                         .block(
                             Block::default()
                                 .borders(Borders::ALL)
@@ -572,13 +303,13 @@ fn main() -> Result<()> {
                 if key.kind == KeyEventKind::Press && key.code == KeyCode::Char('q') {
                     break;
                 } else if key.kind == KeyEventKind::Press && key.code == KeyCode::Up {
-                    app.nodes = merge_up(app.nodes);
+                    app.nodes = movement::merge_up(app.nodes);
                 } else if key.kind == KeyEventKind::Press && key.code == KeyCode::Down {
-                    app.nodes = merge_down(app.nodes);
+                    app.nodes = movement::merge_down(app.nodes);
                 } else if key.kind == KeyEventKind::Press && key.code == KeyCode::Left {
-                    app.nodes = merge_left(app.nodes);
+                    app.nodes = movement::merge_left(app.nodes);
                 } else if key.kind == KeyEventKind::Press && key.code == KeyCode::Right {
-                    app.nodes = merge_right(app.nodes);
+                    app.nodes = movement::merge_right(app.nodes);
                 }
             }
         }
