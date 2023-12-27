@@ -17,7 +17,7 @@ use std::io::{stdout, Read, Result};
 use std::num::ParseIntError;
 use std::rc::Rc;
 use std::u16::MAX;
-use enigo::*;
+//use enigo::*;
 // ANCHOR_END: imports
 
 fn startup(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
@@ -126,9 +126,9 @@ fn shutdown() -> Result<()> {
 fn game_prog(nodes: Vec<Vec<Node>>, state_changed: bool) -> Vec<Vec<Node>> {
     //make a copy of the nodes vector
     let mut new_nodes = nodes.clone();
-    let mut enigo = Enigo::new();
+    //let mut enigo = Enigo::new();
 
-    
+
 
     //iterate through the new_nodes vector and check if any of the nodes are empty
     //if a node is empty, store it's coordinates to a 2d vector
@@ -151,7 +151,9 @@ fn game_prog(nodes: Vec<Vec<Node>>, state_changed: bool) -> Vec<Vec<Node>> {
         //if the state has not changed and there are no empty nodes, the game is over
 
         if check_game_over(&new_nodes) {
-            enigo.key_down(Key::Layout('q'));
+            shutdown().expect("TODO: handle shutdown error");
+            println!("Game Over! No moves left");
+            std::process::exit(0);
         } else {
             //if the game is not over, return the nodes vector
             return new_nodes;
@@ -530,7 +532,7 @@ fn main() -> Result<()> {
                 }
             }
 
-            
+
             for i in 0..4 {
                 for j in 0..4 {
                     if app.nodes[i][j].value > max_value {
@@ -548,18 +550,18 @@ fn main() -> Result<()> {
                 "Score: {}\nBest: {:?}\n\n\n\n\n\nControls:\n← ↑ ↓ →\n\n\n'q' to quit",
                 max_value, best_value
             ))
-            .style(Style::default().fg(Color::Cyan))
-            .block(
-                Block::default()
-                    .title("Stats")
-                    //center the title
-                    .title_alignment(Alignment::Left)
-                    .borders(Borders::ALL)
-                    .border_type(BorderType::Double)
-                    .padding(Padding::new(1, 1, outer[1].height / 3, 1)),
-            )
-            //center the text vertically and horizontally
-            .alignment(Alignment::Left);
+                .style(Style::default().fg(Color::Cyan))
+                .block(
+                    Block::default()
+                        .title("Stats")
+                        //center the title
+                        .title_alignment(Alignment::Left)
+                        .borders(Borders::ALL)
+                        .border_type(BorderType::Double)
+                        .padding(Padding::new(1, 1, outer[1].height / 3, 1)),
+                )
+                //center the text vertically and horizontally
+                .alignment(Alignment::Left);
             frame.render_widget(stats_detail, outer[1]);
         })?;
         //ANCHOR_END: draw
