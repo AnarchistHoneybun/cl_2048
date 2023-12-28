@@ -1,4 +1,4 @@
-use crate::{game_prog, Node};
+use crate::{state_handler, Node};
 
 pub fn merge_up(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
     // iterate across the columns in the nodes vector
@@ -51,7 +51,7 @@ pub fn merge_up(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
         }
     }
 
-    new_nodes = game_prog(new_nodes, state_changed);
+    new_nodes = state_handler::game_prog(new_nodes, state_changed);
 
     //return the new_nodes vector
     return new_nodes;
@@ -99,7 +99,7 @@ pub fn merge_down(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
         }
     }
 
-    new_nodes = game_prog(new_nodes, state_changed);
+    new_nodes = state_handler::game_prog(new_nodes, state_changed);
 
     //return the new_nodes vector
     return new_nodes;
@@ -147,7 +147,7 @@ pub fn merge_left(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
         }
     }
 
-    new_nodes = game_prog(new_nodes, state_changed);
+    new_nodes = state_handler::game_prog(new_nodes, state_changed);
 
     //return the new_nodes vector
     return new_nodes;
@@ -195,7 +195,7 @@ pub fn merge_right(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
         }
     }
 
-    new_nodes = game_prog(new_nodes, state_changed);
+    new_nodes = state_handler::game_prog(new_nodes, state_changed);
 
     //return the new_nodes vector
     return new_nodes;
