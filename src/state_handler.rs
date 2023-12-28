@@ -1,6 +1,6 @@
+use crate::Node;
 use crossterm::execute;
 use crossterm::terminal::{disable_raw_mode, LeaveAlternateScreen};
-use crate::Node;
 
 pub fn startup(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
     //make a copy of the nodes vector
@@ -38,8 +38,6 @@ pub fn shutdown() -> std::io::Result<()> {
 pub fn game_prog(nodes: Vec<Vec<Node>>, state_changed: bool) -> Vec<Vec<Node>> {
     //make a copy of the nodes vector
     let mut new_nodes = nodes.clone();
-
-
 
     //iterate through the new_nodes vector and check if any of the nodes are empty
     //if a node is empty, store it's coordinates to a 2d vector

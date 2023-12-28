@@ -1,32 +1,18 @@
-#![allow(dead_code)]
-#![allow(unused_assignments)]
-
 mod colors;
 mod movement;
 mod state_handler;
 
-
-
-
 // ANCHOR: imports
-use std::fs;
 use crossterm::{
     event::{self, KeyCode, KeyEventKind},
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
 use ratatui::{prelude::*, widgets::*};
+use std::fs;
 use std::io::{stdout, Result};
 use std::rc::Rc;
 // ANCHOR_END: imports
-
-
-fn is_power_of_two(value: u16) -> bool {
-    if value == 0 {
-        return false;
-    }
-    return value & (value - 1) == 0;
-}
 
 
 //ANCHOR: structs
@@ -67,10 +53,11 @@ fn main() -> Result<()> {
 
     //access best score value
     let file_path = "src/best_score.txt";
-    let mut contents = String::new();
-    contents = fs::read_to_string(file_path).expect("Should have a txt file in source");
 
-    let mut best_value = contents.parse::<u16>().unwrap();
+    let mut best_value = fs::read_to_string(file_path)
+                                .expect("Should have a txt file in source")
+                                .parse::<u16>()
+                                .unwrap();
     let mut max_value = 0;
 
     // ANCHOR_END: setup
@@ -136,7 +123,7 @@ fn main() -> Result<()> {
                     //check if block_value is 0
                     //if it is, make block text empty
                     //if it is not, make block text block_value
-                    let mut block_text = String::new();
+                    let block_text: String;
                     if block_value == 0 {
                         block_text = " ".parse().unwrap();
                     } else {
@@ -158,7 +145,6 @@ fn main() -> Result<()> {
                 }
             }
 
-
             for i in 0..4 {
                 for j in 0..4 {
                     if app.nodes[i][j].value > max_value {
@@ -176,18 +162,18 @@ fn main() -> Result<()> {
                 "Score: {}\nBest: {:?}\n\n\n\n\n\nControls:\n← ↑ ↓ →\n\n\n'q' to quit",
                 max_value, best_value
             ))
-                .style(Style::default().fg(Color::Cyan))
-                .block(
-                    Block::default()
-                        .title("Stats")
-                        //center the title
-                        .title_alignment(Alignment::Left)
-                        .borders(Borders::ALL)
-                        .border_type(BorderType::Double)
-                        .padding(Padding::new(1, 1, outer[1].height / 3, 1)),
-                )
-                //center the text vertically and horizontally
-                .alignment(Alignment::Left);
+            .style(Style::default().fg(Color::Cyan))
+            .block(
+                Block::default()
+                    .title("Stats")
+                    //center the title
+                    .title_alignment(Alignment::Left)
+                    .borders(Borders::ALL)
+                    .border_type(BorderType::Double)
+                    .padding(Padding::new(1, 1, outer[1].height / 3, 1)),
+            )
+            //center the text vertically and horizontally
+            .alignment(Alignment::Left);
             frame.render_widget(stats_detail, outer[1]);
         })?;
         //ANCHOR_END: draw
@@ -195,16 +181,15 @@ fn main() -> Result<()> {
         // ANCHOR: handle-events
         if event::poll(std::time::Duration::from_millis(20))? {
             if let event::Event::Key(key) = event::read()? {
-                if key.kind == KeyEventKind::Press && key.code == KeyCode::Char('q') {
-                    break;
-                } else if key.kind == KeyEventKind::Press && key.code == KeyCode::Up {
-                    app.nodes = movement::merge_up(app.nodes);
-                } else if key.kind == KeyEventKind::Press && key.code == KeyCode::Down {
-                    app.nodes = movement::merge_down(app.nodes);
-                } else if key.kind == KeyEventKind::Press && key.code == KeyCode::Left {
-                    app.nodes = movement::merge_left(app.nodes);
-                } else if key.kind == KeyEventKind::Press && key.code == KeyCode::Right {
-                    app.nodes = movement::merge_right(app.nodes);
+                if key.kind == KeyEventKind::Press {
+                    match key.code {
+                        KeyCode::Char('q') => break,
+                        KeyCode::Up => app.nodes = movement::merge_up(app.nodes),
+                        KeyCode::Down => app.nodes = movement::merge_down(app.nodes),
+                        KeyCode::Left => app.nodes = movement::merge_left(app.nodes),
+                        KeyCode::Right => app.nodes = movement::merge_right(app.nodes),
+                        _ => continue,
+                    }
                 }
             }
         }
