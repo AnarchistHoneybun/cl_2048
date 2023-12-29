@@ -158,6 +158,7 @@ fn main() -> Result<()> {
                 fs::write(file_path, best_value.to_string()).expect("Unable to write game data")
             }
 
+            //stats board
             let stats_detail = Paragraph::new(format!(
                 "Score: {}\nBest: {:?}\n\n\n\n\n\nControls:\n← ↑ ↓ →\n\n\n'q' to quit",
                 max_value, best_value
