@@ -1,12 +1,19 @@
 use ratatui::prelude::Color;
 
+
+/// Function color_setter:
+/// takes a u16 input value (this is the value of the node)
+/// and returns a Color enum from the ratatui crate.
+/// The default color is black, and after a certain score in a node
+/// the color stays stagnant at gold.
+
 pub fn color_setter(value: u16) -> Color {
     // check value and generate rgb values based on the value
     if value == 0 {
         return Color::Black;
     }
 
-    //write a match statement that returns a Color::red based on the value
+    //write a match statement that returns a Color::RGB based on the value
 
     match value {
         2 => Color::Rgb {
