@@ -1,13 +1,20 @@
 use crate::{state_handler, Node};
 
+/// The movement functions:
+/// these take a reference to the nodes vector of the game
+/// and return a modified vector with changes based on the direction
+/// of movement selected.
+///
+/// Merging rules:
+/// - Iterate over the column or row, whichever is required
+/// - start from the last value found in the particular column or row
+/// - for a certain node, find the destination node
+/// - a destination node is the closest node in that direction which is
+/// either empty or has the same value as the current node
+/// - merge the nodes
+/// - continue iteration over the remaining nodes
+
 pub fn merge_up(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
-    // iterate across the columns in the nodes vector
-    // for each column, iterate up the rows
-    //if a node is not empty, check if the node above it is empty
-    //if the node above it is empty, move the node up
-    //if the node above it is not empty, check if the node above it is equal to the node
-    //if the node above it is equal to the node, merge the nodes
-    //if the node above it is not equal to the node, move both the nodes up one row
 
     let mut state_changed = false;
 
@@ -50,6 +57,10 @@ pub fn merge_up(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
             }
         }
     }
+
+    /// After movement is done, the game_prog function is called
+    /// which takes the vector of nodes created above and returns
+    /// a modified vector which will be returned to the actual runtime.
 
     new_nodes = state_handler::game_prog(new_nodes, state_changed);
 
