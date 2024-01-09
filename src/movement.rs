@@ -58,9 +58,9 @@ pub fn merge_up(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
         }
     }
 
-    /// After movement is done, the game_prog function is called
-    /// which takes the vector of nodes created above and returns
-    /// a modified vector which will be returned to the actual runtime.
+    // After movement is done, the game_prog function is called
+    // which takes the vector of nodes created above and returns
+    // a modified vector which will be returned to the actual runtime.
 
     new_nodes = state_handler::game_prog(new_nodes, state_changed);
 
