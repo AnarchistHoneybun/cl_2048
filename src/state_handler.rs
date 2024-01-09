@@ -67,11 +67,11 @@ pub fn game_prog(nodes: Vec<Vec<Node>>, state_changed: bool) -> Vec<Vec<Node>> {
         }
     }
 
-    /// Check if the state is unchanged and there are no empty nodes.
-    /// If that is the case, check for game over. If that returns
-    /// true, execute the shutdown function and exit the program.
-    /// If however the game is not over, return the as yet unmodified
-    /// nodes vector.
+    // Check if the state is unchanged and there are no empty nodes.
+    // If that is the case, check for game over. If that returns
+    // true, execute the shutdown function and exit the program.
+    // If however the game is not over, return the as yet unmodified
+    // nodes vector.
 
     if !state_changed && empty_nodes.is_empty() {
         //if the state has not changed and there are no empty nodes, the game is over
@@ -86,18 +86,18 @@ pub fn game_prog(nodes: Vec<Vec<Node>>, state_changed: bool) -> Vec<Vec<Node>> {
         }
     }
 
-    ///If only the state hasn't changed and there are empty nodes,
-    /// return the nodes vector.
+    //If only the state hasn't changed and there are empty nodes,
+    // return the nodes vector.
 
     if !state_changed {
         //if the state has not changed, return the nodes vector
         return new_nodes;
     }
 
-    /// If none of the sentinel checks above return true, then their
-    /// must be some change in state and empty nodes. In that case,
-    /// find a random node from the empty nodes vector and give it a
-    /// value of 2. Then return the vector.
+    // If none of the sentinel checks above return true, then their
+    // must be some change in state and empty nodes. In that case,
+    // find a random node from the empty nodes vector and give it a
+    // value of 2. Then return the vector.
 
     //make a random number between 0 and the length of the empty_nodes vector
     let random_index = rand::random::<usize>() % empty_nodes.len();
