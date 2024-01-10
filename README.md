@@ -5,7 +5,7 @@ The amazing game 2048, written in rust, using ratatui for the interface.
 1. Clone this repo with `https://github.com/AnarchistHoneybun/cl_2048.git`
 2. Move to the cloned directory `cd cl_2048`
 3. Run the game `cargo run` !
-   (to install cargo, look [here](https://doc.rust-lang.org/cargo/getting-started/installation.html){:target="_blank"})
+   (to install cargo, look [here](https://doc.rust-lang.org/cargo/getting-started/installation.html))
 
 <img src="Attachments/gameplay.gif" alt="game_ss" width="70%"/>
 
