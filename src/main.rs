@@ -51,7 +51,7 @@ fn main() -> Result<()>                                                         
     app.nodes = state_handler::startup(app.nodes)                                                 ;
 
     //access best score value
-    let file_path = "src/best_score.txt"                                                          ;
+    let file_path = "src/best_score.txt"                                         ;
 
     let mut best_value = fs::read_to_string(file_path)
         .expect("Should have a txt file in source")

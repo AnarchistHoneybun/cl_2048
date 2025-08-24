@@ -10,6 +10,10 @@ jobs:
   format:
     runs-on: ubuntu-latest
     
+    # Grant write permissions to the GITHUB_TOKEN
+    permissions:
+      contents: write
+    
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -24,7 +28,7 @@ jobs:
     
     - name: Create formatter script
       run: |
-        cat > rust_formatter.pl << 'EOF'
+        cat > /tmp/rust_formatter.pl << 'EOF'
         #!/usr/bin/perl
         use strict;
         use warnings;
@@ -99,14 +103,14 @@ jobs:
         print "Formatted '$input_file'" . ($output_file ne $input_file ? " -> '$output_file'" : " (overwritten)") . "\n";
         EOF
         
-        chmod +x rust_formatter.pl
+        chmod +x /tmp/rust_formatter.pl
     
     - name: Find and format all Rust files
       run: |
         # Find all .rs files and format them
         find . -name "*.rs" -type f | while read -r file; do
           echo "Formatting: $file"
-          ./rust_formatter.pl "$file"
+          /tmp/rust_formatter.pl "$file"
         done
     
     - name: Check for changes
