@@ -2,7 +2,6 @@ use crate::Node;
 use crossterm::execute;
 use crossterm::terminal::{disable_raw_mode, LeaveAlternateScreen};
 
-
 /// Function startup:
 /// takes the initial node vector and populates a node in it
 /// with a value of 2 to serve as the first game tile. Returns the modified vector.

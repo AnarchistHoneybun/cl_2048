@@ -15,7 +15,6 @@ use crate::{state_handler, Node};
 /// - continue iteration over the remaining nodes
 
 pub fn merge_up(nodes: Vec<Vec<Node>>) -> Vec<Vec<Node>> {
-
     let mut state_changed = false;
 
     //make a copy of the nodes vector

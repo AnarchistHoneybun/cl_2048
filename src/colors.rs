@@ -1,6 +1,5 @@
 use ratatui::prelude::Color;
 
-
 /// Function color_setter:
 /// takes a u16 input value (this is the value of the node)
 /// and returns a Color enum from the ratatui crate.

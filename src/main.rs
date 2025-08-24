@@ -8,12 +8,12 @@ use crossterm::{
     terminal::{disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen},
     ExecutableCommand,
 };
+
 use ratatui::{prelude::*, widgets::*};
 use std::fs;
 use std::io::{stdout, Result};
 use std::rc::Rc;
 // ANCHOR_END: imports
-
 
 //ANCHOR: structs
 struct App {
@@ -33,7 +33,6 @@ fn main() -> Result<()> {
     enable_raw_mode()?;
     let mut terminal = Terminal::new(CrosstermBackend::new(stdout()))?;
     terminal.clear()?;
-
     //fill the 2d vector in the app struct with empty nodes
     let mut app = App {
         nodes: vec![
@@ -55,12 +54,12 @@ fn main() -> Result<()> {
     let file_path = "src/best_score.txt";
 
     let mut best_value = fs::read_to_string(file_path)
-                                .expect("Should have a txt file in source")
-                                .parse::<u16>()
-                                .unwrap();
+        .expect("Should have a txt file in source")
+        .parse::<u16>()
+        .unwrap();
     let mut max_value = 0;
 
-    // ANCHOR_END: setup
+    // ANCHOR_END: set
 
     //ANCHOR: draw
 
