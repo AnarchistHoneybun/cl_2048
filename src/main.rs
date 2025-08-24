@@ -153,6 +153,7 @@ fn main() -> Result<()> {
             }
 
             if max_value > best_value {
+                
                 best_value = max_value;
                 fs::write(file_path, best_value.to_string()).expect("Unable to write game data")
             }
